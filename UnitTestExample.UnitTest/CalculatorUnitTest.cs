@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 // Class Under Test
 using UnitTestExample;
@@ -45,10 +46,30 @@ namespace UnitTestExample.UnitTest
             Assert.Fail("No Exception Thrown");
         }
 
+        [TestMethod]
+        [DynamicData(nameof(GetData), DynamicDataSourceType.Method)]
+        public void DynamicCalculatorTest(double x, double y, double expected)
+        {
+            var calculator = new Calculator();
+            var sum = calculator.Addition(x, y);
+
+            Assert.AreEqual(sum, expected);
+        }
+
         [TestCleanup]
         public void TestCleanUp()
         {
             Console.WriteLine("Cleaning Up Test!");
         }
+
+        // helper functions
+
+        public static IEnumerable<object[]> GetData()
+        {
+            yield return new object[] { 2, 2, 4 };
+            yield return new object[] { 1, 1, 2 };
+            yield return new object[] { 4, 7, 11 };
+        }
+
     }
 }
